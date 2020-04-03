@@ -23,6 +23,17 @@ def plot_country_growth_rates(country):
                       xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Confirmed Cases',
                       tools=['hover'], show_frame=False))
 
+                      
+def plot_confirmed_with_recovered(country):
+    confirmed_country = confirmed.loc[:, (slice(None), country)].sum(axis=1)
+    recovered_country = recovered.loc[:, (slice(None), country)].sum(axis=1)
+    return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index]) *
+            hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
+                .redim(x='Date', y='Number of Cases')
+                .opts(opts.Curve(height=500, width=700,
+                      ylim=(0, 250000), title='Confirmed and Recovered Cases',
+                      show_frame=False, tools=['hover'])))
+
 
 def plot_country_recovery_rates(country):
     recovered_country = recovered.loc[:, (slice(None), country)].sum(axis=1)
@@ -45,26 +56,6 @@ def plot_current_vs_new(country):
                       tools=['hover'], show_frame=False))
 
 
-def plot_confirmed_with_recovered(country):
-    confirmed_country = confirmed.loc[:, (slice(None), country)].sum(axis=1)
-    recovered_country = recovered.loc[:, (slice(None), country)].sum(axis=1)
-    return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index]) *
-            hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
-                .redim(x='Date', y='Number of Cases')
-                .opts(opts.Curve(height=500, width=700,
-                      ylim=(0, 250000), title='Confirmed and Recovered Cases',
-                      show_frame=False, tools=['hover'])))
-
-
-def plot_deaths(country):
-    death_country = death.loc[:, (slice(None), country)].sum(axis=1)
-    return (hv.Curve([(i, death_country.loc[i]) for i in death_country.index])
-                .redim(x='Date', y='Number of Cases')
-                .opts(height=500, width=700,
-                      ylim=(0, 200), title='Number of Death Cases',
-                      tools=['hover'], show_frame=False))
-
-
 def plot_death_rate(country):
     confirmed_country = confirmed.loc[:, (slice(None), country)].sum(axis=1)
     recovered_country = recovered.loc[:, (slice(None), country)].sum(axis=1)
@@ -74,6 +65,15 @@ def plot_death_rate(country):
                 .redim(x='Days', y='Daily rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
                       xrotation=90, ylim=(0, 10), title='Daily Death Rates',
+                      tools=['hover'], show_frame=False))
+
+
+def plot_deaths(country):
+    death_country = death.loc[:, (slice(None), country)].sum(axis=1)
+    return (hv.Curve([(i, death_country.loc[i]) for i in death_country.index])
+                .redim(x='Date', y='Number of Cases')
+                .opts(height=500, width=700,
+                      ylim=(0, 200), title='Number of Death Cases',
                       tools=['hover'], show_frame=False))
 
 
