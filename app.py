@@ -99,7 +99,7 @@ thread = Thread(target=update, daemon=True)
 thread.start()
 time.sleep(5)  # FIXME: allow dataframes to be updated
 
-countries = ['Germany', 'Italy', 'France', 'Spain', 'US', 'Indonesia', 'Korea, South', 'Singapore'] 
+countries = sorted(['Germany', 'Italy', 'France', 'Spain', 'US', 'Indonesia', 'India', 'Korea, South', 'Singapore']) 
 
 dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
             for x in [plot_country_growth_rates,
