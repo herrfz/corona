@@ -1,9 +1,7 @@
-import time
 import pandas as pd
 import numpy as np
 import holoviews as hv
 from holoviews import opts
-from threading import Thread
 hv.extension('bokeh')
 
 
@@ -28,7 +26,7 @@ def plot_confirmed_with_recovered(country):
     confirmed_country = confirmed.loc[:, (slice(None), country)].sum(axis=1)
     recovered_country = recovered.loc[:, (slice(None), country)].sum(axis=1)
     return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index]) *
-            hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
+             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
                 .redim(x='Date', y='Number of Cases')
                 .opts(opts.Curve(height=400, width=700,
                       ylim=(0, 500000), title='Confirmed and Recovered Cases',
@@ -77,27 +75,13 @@ def plot_deaths(country):
                       tools=['hover'], show_frame=False))
 
 
-def update():
-    while True:
-        global confirmed, recovered, death
-        print('INFO: updating data...')
-        confirmed = transform(pd.read_csv(urls['confirmed']))
-        recovered = transform(pd.read_csv(urls['recovered']))
-        death = transform(pd.read_csv(urls['death']))
-        time.sleep(3600)
-
-
 urls = {'confirmed': 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
         'recovered': 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
         'death': 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'}
 
-confirmed = pd.DataFrame()
-recovered = pd.DataFrame()
-death = pd.DataFrame()
-
-thread = Thread(target=update, daemon=True)
-thread.start()
-time.sleep(5)  # FIXME: allow dataframes to be updated
+confirmed = transform(pd.read_csv(urls['confirmed']))
+recovered = transform(pd.read_csv(urls['recovered']))
+death = transform(pd.read_csv(urls['death']))
 
 countries = sorted(['Germany', 'Italy', 'France', 'Spain', 'US', 'Indonesia', 'India', 'Korea, South', 'Singapore']) 
 
