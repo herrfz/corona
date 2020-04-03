@@ -20,7 +20,7 @@ def plot_country_growth_rates(country):
     return (hv.Bars([(i, confirmed_country_rate.loc[i]) for i in confirmed_country_rate.index])
                 .redim(x='Days', y='Daily growth rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 200),
+                      xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Confirmed Cases',
                       tools=['hover'], show_frame=False))
 
 
@@ -31,7 +31,7 @@ def plot_country_recovery_rates(country):
     return (hv.Bars([(i, recovered_country_rate.loc[i]) for i in recovered_country_rate.index])
                 .redim(x='Days', y='Daily growth rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 200),
+                      xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Recovered Cases',
                       tools=['hover'], show_frame=False))
 
 
@@ -41,7 +41,7 @@ def plot_current_vs_new(country):
     return (hv.Scatter((confirmed_country, confirmed_country_new))
                 .redim(x='Current cases', y='New cases')
                 .opts(height=400, width=600, size=7,
-                      logx=True, logy=True, xlim=(1, 1e6), ylim=(1e-1, 1e5),
+                      logx=True, logy=True, xlim=(1, 1e6), ylim=(1e-1, 1e5), title='Number of Confirmed vs New Cases',
                       tools=['hover'], show_frame=False))
 
 
@@ -51,14 +51,16 @@ def plot_confirmed_with_recovered(country):
     return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index]) *
             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
                 .redim(x='Date', y='Number of Cases')
-                .opts(opts.Curve(height=500, width=700, show_frame=False, tools=['hover'])))
+                .opts(opts.Curve(height=500, width=700, title='Confirmed and Recovered Cases',
+                      show_frame=False, tools=['hover'])))
 
 
 def plot_deaths(country):
     death_country = death.loc[:, (slice(None), country)].sum(axis=1)
     return (hv.Curve([(i, death_country.loc[i]) for i in death_country.index])
                 .redim(x='Date', y='Number of Cases')
-                .opts(height=500, width=700, tools=['hover'], show_frame=False))
+                .opts(height=500, width=700, title='Number of Death Cases',
+                      tools=['hover'], show_frame=False))
 
 
 def plot_death_rate(country):
@@ -69,7 +71,7 @@ def plot_death_rate(country):
     return (hv.Bars([(i, death_country_rate.loc[i]) for i in death_country_rate.index])
                 .redim(x='Days', y='Daily rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 10),
+                      xrotation=90, ylim=(0, 10), title='Daily Death Rates',
                       tools=['hover'], show_frame=False))
 
 
@@ -80,6 +82,7 @@ def update():
         recovered = transform(pd.read_csv(urls['recovered']))
         death = transform(pd.read_csv(urls['death']))
         time.sleep(3600)
+
 
 urls = {'confirmed': 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
         'recovered': 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv',
@@ -95,12 +98,13 @@ time.sleep(5)  # FIXME: allow dataframes to be updated
 
 countries = ['Germany', 'Italy', 'France', 'Spain', 'US', 'Indonesia', 'Korea, South', 'Singapore'] 
 
-dmaps = [hv.DynamicMap(plot_country_growth_rates, kdims='country').redim.values(country=countries),
-         hv.DynamicMap(plot_country_recovery_rates, kdims='country').redim.values(country=countries),
-         hv.DynamicMap(plot_current_vs_new, kdims='country').redim.values(country=countries),
-         hv.DynamicMap(plot_confirmed_with_recovered, kdims='country').redim.values(country=countries),
-         hv.DynamicMap(plot_deaths, kdims='country').redim.values(country=countries),
-         hv.DynamicMap(plot_death_rate, kdims='country').redim.values(country=countries)]
+dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
+            for x in [plot_country_growth_rates,
+                      plot_country_recovery_rates,
+                      plot_current_vs_new,
+                      plot_confirmed_with_recovered,
+                      plot_deaths,
+                      plot_death_rate]]
 
 layout = hv.Layout(dmaps).cols(1)
 
