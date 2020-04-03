@@ -25,8 +25,8 @@ def plot_country_growth_rates(country):
 def plot_confirmed_with_recovered(country):
     confirmed_country = confirmed.loc[:, (slice(None), country)].sum(axis=1)
     recovered_country = recovered.loc[:, (slice(None), country)].sum(axis=1)
-    return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index]) *
-             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
+    return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index], label='Confirmed') *
+             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index], label='Recovered'))
                 .redim(x='Date', y='Number of Cases')
                 .opts(opts.Curve(height=400, width=700,
                       ylim=(0, 500000), title='Confirmed and Recovered Cases',
