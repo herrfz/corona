@@ -29,7 +29,7 @@ def plot_confirmed_with_recovered(country):
              hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index], label='Recovered'))
                 .redim(x='Date', y='Number of Cases')
                 .opts(opts.Curve(height=400, width=700,
-                      ylim=(0, 500000), title='Confirmed and Recovered Cases',
+                      logy=True, ylim=(1, 500000), title='Confirmed and Recovered Cases',
                       show_frame=False, tools=['hover'])))
 
 
@@ -50,7 +50,7 @@ def plot_current_vs_new(country):
     return (hv.Scatter((confirmed_country, confirmed_country_new))
                 .redim(x='Current cases', y='New cases')
                 .opts(height=400, width=700, size=7,
-                      logx=True, logy=True, xlim=(1, 1e6), ylim=(1e-1, 1e5), title='Number of Confirmed vs New Cases',
+                      logx=True, logy=True, xlim=(1, 1e6), ylim=(1, 1e5), title='Number of Confirmed vs New Cases',
                       tools=['hover'], show_frame=False))
 
 
@@ -71,7 +71,7 @@ def plot_deaths(country):
     return (hv.Curve([(i, death_country.loc[i]) for i in death_country.index])
                 .redim(x='Date', y='Number of Cases')
                 .opts(height=400, width=700,
-                      ylim=(0, 20000), title='Number of Death Cases',
+                      logy=True, ylim=(1, 20000), title='Number of Death Cases',
                       tools=['hover'], show_frame=False))
 
 
@@ -83,7 +83,9 @@ confirmed = transform(pd.read_csv(urls['confirmed']))
 recovered = transform(pd.read_csv(urls['recovered']))
 death = transform(pd.read_csv(urls['death']))
 
-countries = sorted(['Germany', 'Italy', 'France', 'Spain', 'US', 'Indonesia', 'India', 'Korea, South', 'Singapore']) 
+countries = sorted(['China', 'Germany', 'Italy', 'France',
+                    'Spain', 'US', 'Indonesia', 'India',
+                    'Korea, South', 'Singapore', 'United Kingdom']) 
 
 dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
             for x in [plot_country_growth_rates,
