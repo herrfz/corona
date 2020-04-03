@@ -31,7 +31,7 @@ def plot_confirmed_with_recovered(country):
             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
                 .redim(x='Date', y='Number of Cases')
                 .opts(opts.Curve(height=500, width=700,
-                      ylim=(0, 1e6), title='Confirmed and Recovered Cases',
+                      ylim=(0, 500000), title='Confirmed and Recovered Cases',
                       show_frame=False, tools=['hover'])))
 
 
@@ -73,7 +73,7 @@ def plot_deaths(country):
     return (hv.Curve([(i, death_country.loc[i]) for i in death_country.index])
                 .redim(x='Date', y='Number of Cases')
                 .opts(height=500, width=700,
-                      ylim=(0, 200), title='Number of Death Cases',
+                      ylim=(0, 20000), title='Number of Death Cases',
                       tools=['hover'], show_frame=False))
 
 
