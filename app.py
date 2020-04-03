@@ -102,11 +102,11 @@ countries = ['Germany', 'Italy', 'France', 'Spain', 'US', 'Indonesia', 'Korea, S
 
 dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
             for x in [plot_country_growth_rates,
+                      plot_confirmed_with_recovered,
                       plot_country_recovery_rates,
                       plot_current_vs_new,
-                      plot_confirmed_with_recovered,
-                      plot_deaths,
-                      plot_death_rate]]
+                      plot_death_rate,
+                      plot_deaths]]
 
 layout = hv.Layout(dmaps).cols(1)
 
