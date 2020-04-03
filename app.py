@@ -30,7 +30,7 @@ def plot_confirmed_with_recovered(country):
     return ((hv.Curve([(i, confirmed_country.loc[i]) for i in confirmed_country.index]) *
             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
                 .redim(x='Date', y='Number of Cases')
-                .opts(opts.Curve(height=500, width=700,
+                .opts(opts.Curve(height=400, width=700,
                       ylim=(0, 500000), title='Confirmed and Recovered Cases',
                       show_frame=False, tools=['hover'])))
 
@@ -51,7 +51,7 @@ def plot_current_vs_new(country):
     confirmed_country_new = confirmed_country.diff()
     return (hv.Scatter((confirmed_country, confirmed_country_new))
                 .redim(x='Current cases', y='New cases')
-                .opts(height=400, width=600, size=7,
+                .opts(height=400, width=700, size=7,
                       logx=True, logy=True, xlim=(1, 1e6), ylim=(1e-1, 1e5), title='Number of Confirmed vs New Cases',
                       tools=['hover'], show_frame=False))
 
@@ -72,7 +72,7 @@ def plot_deaths(country):
     death_country = death.loc[:, (slice(None), country)].sum(axis=1)
     return (hv.Curve([(i, death_country.loc[i]) for i in death_country.index])
                 .redim(x='Date', y='Number of Cases')
-                .opts(height=500, width=700,
+                .opts(height=400, width=700,
                       ylim=(0, 20000), title='Number of Death Cases',
                       tools=['hover'], show_frame=False))
 
