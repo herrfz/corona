@@ -31,7 +31,7 @@ def plot_confirmed_with_recovered(country):
             hv.Curve([(i, recovered_country.loc[i]) for i in recovered_country.index]))
                 .redim(x='Date', y='Number of Cases')
                 .opts(opts.Curve(height=500, width=700,
-                      ylim=(0, 250000), title='Confirmed and Recovered Cases',
+                      ylim=(0, 1e6), title='Confirmed and Recovered Cases',
                       show_frame=False, tools=['hover'])))
 
 
@@ -108,7 +108,7 @@ dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
                       plot_death_rate,
                       plot_deaths]]
 
-layout = hv.Layout(dmaps).cols(1)
+layout = hv.Layout(dmaps).opts('Curve', axiswise=True).cols(1)
 
 renderer = hv.renderer('bokeh')
 doc = renderer.server_doc(layout)
