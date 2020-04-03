@@ -80,6 +80,7 @@ def plot_deaths(country):
 def update():
     while True:
         global confirmed, recovered, death
+        print('INFO: updating data...')
         confirmed = transform(pd.read_csv(urls['confirmed']))
         recovered = transform(pd.read_csv(urls['recovered']))
         death = transform(pd.read_csv(urls['death']))
