@@ -89,11 +89,11 @@ countries = sorted(['China', 'Germany', 'Italy', 'France',
 
 dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
             for x in [plot_country_growth_rates,
-                      plot_current_vs_new,
                       plot_country_recovery_rates,
                       plot_confirmed_with_recovered,
-                      plot_death_rate,
-                      plot_deaths]]
+                      plot_deaths,
+                      plot_current_vs_new,
+                      plot_death_rate]]
 
 layout = hv.Layout(dmaps).opts('Curve', axiswise=True).cols(2)
 
