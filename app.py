@@ -93,7 +93,7 @@ recovered = transform(pd.read_csv(urls['recovered']))
 death = transform(pd.read_csv(urls['death']))
 
 countries = sorted(['China', 'Germany', 'Italy', 'France', 'Austria',
-                    'Spain', 'US', 'Indonesia', 'India', 'Switzerland'
+                    'Spain', 'US', 'Indonesia', 'India', 'Switzerland',
                     'Korea, South', 'Singapore', 'United Kingdom', 'Iran']) 
 
 dmaps = [hv.DynamicMap(x, kdims='country').redim.values(country=countries)
