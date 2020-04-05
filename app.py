@@ -71,7 +71,7 @@ def plot_death_rate(country):
     return (hv.Bars([(i, death_country_rate.loc[i]) for i in death_country_rate.index])
                 .redim(x='Date', y='Daily rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 10), title='Daily Death Rates',
+                      xrotation=90, ylim=(0, 10), title='Daily Death Rates (% of infected)',
                       tools=['hover'], show_frame=False))
 
 
