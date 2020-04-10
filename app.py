@@ -69,9 +69,9 @@ def plot_death_rate(country):
     death_country = death.loc[:, (slice(None), country)].sum(axis=1)
     death_country_rate = (death_country / (confirmed_country + recovered_country + death_country) * 100).replace([np.inf, -np.inf], np.nan).dropna()
     return (hv.Bars([(i, death_country_rate.loc[i]) for i in death_country_rate.index])
-                .redim(x='Date', y='Daily rate (%)')
+                .redim(x='Date', y='Death rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 10), title='Daily Death Rates (% of infected)',
+                      xrotation=90, ylim=(0, 10), title='Death Rate (% of infected)',
                       tools=['hover'], show_frame=False))
 
 
