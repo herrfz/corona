@@ -71,7 +71,7 @@ def plot_death_rate(country):
     return (hv.Bars([(i, death_country_rate.loc[i]) for i in death_country_rate.index])
                 .redim(x='Date', y='Death rate (%)')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 10), title='Death Rate (% of infected)',
+                      xrotation=90, ylim=(0, 15), title='Death Rate (% of infected)',
                       tools=['hover'], show_frame=False))
 
 
@@ -92,7 +92,7 @@ confirmed = transform(pd.read_csv(urls['confirmed']))
 recovered = transform(pd.read_csv(urls['recovered']))
 death = transform(pd.read_csv(urls['death']))
 
-countries = sorted(['China', 'Germany', 'Italy', 'France', 'Austria',
+countries = sorted(['China', 'Germany', 'Italy', 'France', 'Austria', 'Japan',
                     'Spain', 'US', 'Indonesia', 'India', 'Switzerland',
                     'Korea, South', 'Singapore', 'United Kingdom', 'Iran']) 
 
