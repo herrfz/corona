@@ -44,7 +44,7 @@ def plot_country_growth_rates(country):
     return (hv.Bars([(i, confirmed_country_rate.loc[i]) for i in confirmed_country_rate.index])
                 .redim(x='Date', y='Percent')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Confirmed Cases',
+                      xrotation=90, ylim=(0, 100), title='Day-over-Day Growth of Confirmed Cases',
                       tools=[rhover], show_frame=False))
 
                       
@@ -67,7 +67,7 @@ def plot_country_recovery_rates(country):
     return (hv.Bars([(i, recovered_country_rate.loc[i]) for i in recovered_country_rate.index])
                 .redim(x='Date', y='Percent')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
-                      xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Recovered Cases',
+                      xrotation=90, ylim=(0, 100), title='Day-over-Day Growth of Recovered Cases',
                       tools=[rhover], show_frame=False))
 
 
