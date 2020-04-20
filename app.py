@@ -4,12 +4,30 @@ import holoviews as hv
 from holoviews import opts
 from bokeh.models import HoverTool
 hv.extension('bokeh')
-hover = HoverTool(
+nhover = HoverTool(
     tooltips=[
         ('Date', '@Date{%F}'),
         ('Number of Cases', '@{Number of Cases}')
     ],
-    formatters={'@Date': 'datetime'}
+    formatters={'@Date': 'datetime'},
+    mode='vline'
+)
+
+rhover = HoverTool(
+    tooltips=[
+        ('Date', '@Date{%F}'),
+        ('Rate (%)', '@Percent{1.11}')
+    ],
+    formatters={'@Date': 'datetime'},
+    mode='vline'
+)
+
+shover = HoverTool(
+    tooltips=[
+        ('Confirmed cases', '@{Confirmed cases}'),
+        ('New cases', '@{New cases}')
+    ],
+    mode='vline'
 )
 
 
@@ -24,10 +42,10 @@ def plot_country_growth_rates(country):
     confirmed_country_rate = (((confirmed_country / confirmed_country.shift() - 1) * 100)
                                   .replace([np.inf, -np.inf], np.nan).dropna())
     return (hv.Bars([(i, confirmed_country_rate.loc[i]) for i in confirmed_country_rate.index])
-                .redim(x='Date', y='Daily growth rate (%)')
+                .redim(x='Date', y='Percent')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
                       xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Confirmed Cases',
-                      tools=['hover'], show_frame=False))
+                      tools=[rhover], show_frame=False))
 
                       
 def plot_confirmed_with_recovered(country):
@@ -39,7 +57,7 @@ def plot_confirmed_with_recovered(country):
                 .opts(legend_position='top_left')
                 .opts(opts.Curve(height=400, width=700,
                       logy=True, ylim=(1, 1e6), title='Confirmed and Recovered Cases',
-                      show_frame=False, tools=[hover])))
+                      show_frame=False, tools=[nhover])))
 
 
 def plot_country_recovery_rates(country):
@@ -47,10 +65,10 @@ def plot_country_recovery_rates(country):
     recovered_country_rate = (((recovered_country / recovered_country.shift() - 1) * 100)
                                   .replace([np.inf, -np.inf], np.nan).dropna())
     return (hv.Bars([(i, recovered_country_rate.loc[i]) for i in recovered_country_rate.index])
-                .redim(x='Date', y='Daily growth rate (%)')
+                .redim(x='Date', y='Percent')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
                       xrotation=90, ylim=(0, 200), title='Day-over-Day Growth of Recovered Cases',
-                      tools=['hover'], show_frame=False))
+                      tools=[rhover], show_frame=False))
 
 
 def plot_current_vs_new(country):
@@ -60,7 +78,7 @@ def plot_current_vs_new(country):
                 .redim(x='Confirmed cases', y='New cases')
                 .opts(height=400, width=700, size=7,
                       logx=True, logy=True, xlim=(1, 1e6), ylim=(1, 1e5), title='Number of Confirmed vs New Cases',
-                      tools=['hover'], show_frame=False))
+                      tools=[shover], show_frame=False))
 
 
 def plot_death_rate(country):
@@ -69,10 +87,10 @@ def plot_death_rate(country):
     death_country = death.loc[:, (slice(None), country)].sum(axis=1)
     death_country_rate = (death_country / (confirmed_country + recovered_country + death_country) * 100).replace([np.inf, -np.inf], np.nan).dropna()
     return (hv.Bars([(i, death_country_rate.loc[i]) for i in death_country_rate.index])
-                .redim(x='Date', y='Death rate (%)')
+                .redim(x='Date', y='Percent')
                 .opts(height=400, width=700, fontsize={'xticks': 6},
                       xrotation=90, ylim=(0, 15), title='Death Rate (% of infected)',
-                      tools=['hover'], show_frame=False))
+                      tools=[rhover], show_frame=False))
 
 
 def plot_deaths(country):
@@ -81,7 +99,7 @@ def plot_deaths(country):
                 .redim(x='Date', y='Number of Cases')
                 .opts(height=400, width=700,
                       logy=True, ylim=(1, 1e6), title='Number of Death Cases',
-                      tools=[hover], show_frame=False))
+                      tools=[nhover], show_frame=False))
 
 
 urls = {'confirmed': 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv',
